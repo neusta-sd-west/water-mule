@@ -1,2 +1,4 @@
-# watermule
-IoT training plattform0
+# WaterMule
+
+![title](docs/assets/watermule-logo.png)
+
