@@ -5,7 +5,7 @@ Als Basissystem wird ein lauffähiges Ubuntu 20.04 System vorrausgesetzt.
 
 ## Seperater User für weitere Aufgaben
 https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-20-04
-adduser mule - passwort hk&42GG$ghk78
+adduser mule - passwort GEHEIM
 usermod -aG sudo mule
 rsync --archive --chown=mule:mule ~/.ssh /home/mule
 

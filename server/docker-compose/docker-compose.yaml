@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+    watermule_frontend:
+      image: dsakhan/watermule-frontend:0.0.2
+      ports:
+        - "8080:80"
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "200k"
+          max-file: "10"
+      restart: unless-stopped
+
