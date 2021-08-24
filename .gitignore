@@ -1,1 +1,7 @@
 server/passwords.md
+server/temp_dok.md
+
+server/mqtt-client/target/
+server/mqtt-client/.idea/
+
+server/docker-compose/docker-compose.yaml
