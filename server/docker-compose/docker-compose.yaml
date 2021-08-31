@@ -1,6 +1,46 @@
 version: "3"
 
 services:
+    timescaledb:
+      image: timescale/timescaledb:latest-pg12
+      environment:
+        POSTGRES_DB: watermule_db
+        POSTGRES_USER: watermule
+        POSTGRES_PASSWORD: "jmyFNnJJpoqm9Ey6"
+      volumes:
+        - ./data/timescaledb:/var/lib/postgresql/data
+      ports:
+        - "5432:5432"
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "200k"
+          max-file: "10"
+      restart: unless-stopped
+
+    keycloak:
+      image: jboss/keycloak:15.0.2
+      environment:
+        DB_VENDOR: "POSTGRES"
+        DP_PORT: "5432"
+        DB_ADDR: "timescaledb"
+        DB_DATABASE: "keycloak_db"
+        DB_USER: "keycloak"
+        DB_PASSWORD: "nqgK99JYnbxQACMc"
+        KEYCLOAK_USER: "keycloak_admin"
+        KEYCLOAK_PASSWORD: "seYNDkLRjbg8tCEt"
+        PROXY_ADDRESS_FORWARDING: "true"
+      expose:
+        - "8085"
+      depends_on:
+        - timescaledb
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "200k"
+          max-file: "10"
+      restart: unless-stopped
+
     watermule-frontend:
       image: dsakhan/watermule-frontend:0.0.2
       ports:
@@ -28,3 +68,22 @@ services:
           max-file: "10"
       restart: unless-stopped
 
+    watermule-mqtt-client:
+      image: dsakhan/watermule-mqtt-client:0.0.3
+      depends_on:
+            - timescaledb
+      environment:
+        - "WM_MQTT_BROKER_HOST=watermule.neusta-sd-west.de"
+        - "WM_MQTT_BROCKER_PORT=8883"
+        - "WM_MQTT_BROCKER_USER=mule_client"
+        - "WM_MQTT_BROCKER_PASSWORD=NHmeSD8cGk5KL"
+        - "WM_DB_USERNAME=watermule"
+        - "WM_DB_PASSWORD=jmyFNnJJpoqm9Ey6"
+        - "WM_DB_URL=jdbc:postgresql://timescaledb:5432/watermule_db?sslmode=disable"
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "200k"
+          max-file: "10"
+      restart: unless-stopped
+      
