@@ -1579,3 +1579,4 @@ server/docker-compose/data/timescaledb/pg_wal/000000010000000000000001
 server/docker-compose/data/timescaledb/pg_wal/000000010000000000000002
 server/docker-compose/data/timescaledb/pg_xact/0000
 server/docker-compose/data/timescaledb/base/1/pg_internal.init
+server/docker-compose/docker-compose copy.yaml
