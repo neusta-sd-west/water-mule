@@ -19,9 +19,6 @@ import static java.sql.Timestamp.from;
 
 @Repository
 public class WmRepository {
-    private static final String INSERT_MEASUREMENTS_QUERY =
-            "INSERT INTO timeseries.measurements(channel_id, timestamp, measurement) VALUES(?, ?, ?)";
-
     private final JdbcTemplate jdbcTemplate;
 
     public WmRepository(@NonNull final JdbcTemplate jdbcTemplate) {
@@ -30,7 +27,7 @@ public class WmRepository {
 
     public void saveMessage(String topic, WmMessage wmMessage) {
         this.jdbcTemplate.update(
-                INSERT_MEASUREMENTS_QUERY,
+                "INSERT INTO timeseries.measurements(channel_id, timestamp, measurement) VALUES(?, ?, ?)",
                 preparedStatement -> {
                     preparedStatement.setString(1, topic);
                     preparedStatement.setTimestamp(2, from(wmMessage.getTimestamp().toInstant(ZoneOffset.UTC)));
@@ -51,6 +48,26 @@ public class WmRepository {
                         rs.getString("description")));
     }
 
+    public NodeDto createNode(NodeDto dto) {
+        this.jdbcTemplate.update(
+                "INSERT INTO metadata.thing_nodes(id, name, description) VALUES(?, ?, ?)",
+                preparedStatement -> {
+                    preparedStatement.setString(1, dto.getId());
+                    preparedStatement.setString(2, dto.getName());
+                    preparedStatement.setString(3, dto.getDescription());
+                });
+
+        return dto;
+    }
+
+    public void deleteNode(String id) {
+        this.jdbcTemplate.update(
+                "delete from metadata.thing_nodes where id = ?",
+                preparedStatement -> {
+                    preparedStatement.setString(1, id);
+                });
+    }
+
     public List<DeviceDto> getDeviceList() {
         return this.jdbcTemplate.query(
                 "select id, thing_node_id, name, description from metadata.things",
@@ -59,6 +76,27 @@ public class WmRepository {
                         rs.getString("thing_node_id"),
                         rs.getString("name"),
                         rs.getString("description")));
+    }
+
+    public DeviceDto createDevice(DeviceDto dto) {
+        this.jdbcTemplate.update(
+                "INSERT INTO metadata.things(id, name, description, thing_node_id) VALUES(?, ?, ?, ?)",
+                preparedStatement -> {
+                    preparedStatement.setString(1, dto.getId());
+                    preparedStatement.setString(2, dto.getName());
+                    preparedStatement.setString(3, dto.getDescription());
+                    preparedStatement.setString(4, dto.getNodeId());
+                });
+
+        return dto;
+    }
+
+    public void deleteDevice(String id) {
+        this.jdbcTemplate.update(
+                "delete from metadata.things where id = ?",
+                preparedStatement -> {
+                    preparedStatement.setString(1, id);
+                });
     }
 
     public List<ChannelDto> getChannelList() {
@@ -72,4 +110,31 @@ public class WmRepository {
                         rs.getString("unit")));
     }
 
+    public ChannelDto createChannel(ChannelDto dto) {
+        this.jdbcTemplate.update(
+                "INSERT INTO metadata.channels(id, thing_id, name, description, unit) VALUES(?, ?, ?, ?, ?)",
+                preparedStatement -> {
+                    preparedStatement.setString(1, dto.getId());
+                    preparedStatement.setString(2, dto.getDeviceId());
+                    preparedStatement.setString(3, dto.getName());
+                    preparedStatement.setString(4, dto.getDescription());
+                    preparedStatement.setString(5, dto.getUnit());
+                });
+
+        return dto;
+    }
+
+    public void deleteChannel(String id) {
+        this.jdbcTemplate.update(
+                "delete from timeseries.measurements where channel_id = ?",
+                preparedStatement -> {
+                    preparedStatement.setString(1, id);
+                });
+
+        this.jdbcTemplate.update(
+                "delete from metadata.channels where id = ?",
+                preparedStatement -> {
+                    preparedStatement.setString(1, id);
+                });
+    }
 }

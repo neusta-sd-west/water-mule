@@ -1,6 +1,6 @@
 export class Device {
   id="";
-  node_id="";
+  nodeId="";
   name="";
   description="";
 }

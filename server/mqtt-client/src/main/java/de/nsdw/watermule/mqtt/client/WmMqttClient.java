@@ -62,6 +62,7 @@ public class WmMqttClient {
 
     @Scheduled(initialDelay = 60000, fixedRate = 20000)
     private void updateSubscriptions() throws MqttException {
+        // TODO: Remove deleted channels
         List<String> actualTopics = this.repository.readTopics();
         actualTopics.removeAll(this.mqttTopics);
         if(actualTopics.size()>0){

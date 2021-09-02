@@ -46,6 +46,7 @@ export class MainComponent implements OnInit {
 
   onChannelNew(): void {
     this.channel = new Channel();
+    this.channel.deviceId = this.devices[0].id;
     this.showChannelDlg = true;
   }
 
@@ -56,14 +57,72 @@ export class MainComponent implements OnInit {
 
   onDeviceNew(): void {
     this.device = new Device();
+    this.device.nodeId = this.nodes[0].id;
     this.showDeviceDlg = true;
   }
 
   onSaveNode() {
-    if(this.node.id.length>0 && this.node.name.length && this.node.description.length>0) {
-      this.service.saveNode(this.node).subscribe(() => this.showThingNodeDlg = false);
+    if(this.node.id.length>0 && this.node.name.length) {
+      this.service.saveNode(this.node).subscribe(() => {
+        this.service.fetchNodes().subscribe(n => {
+          this.nodes = n;
+        });
+        this.showThingNodeDlg = false;
+      });
     } else {
       this.messageService.add({severity:'error', summary: 'Fehler', detail: 'Das Formular muss komplett ausgefüllt sein.'});
     }
+  }
+
+  onSaveDevice() {
+    if(this.device.id.length > 0 && this.device.name.length > 0 && this.device.nodeId.length > 0) {
+      this.device.id = this.device.nodeId + "/" + this.device.id;
+      this.service.saveDevice(this.device).subscribe(() => {
+        this.service.fetchDevices().subscribe(n => {
+          this.devices = n;
+        });
+        this.showDeviceDlg = false;
+      });
+    } else {
+      this.messageService.add({severity:'error', summary: 'Fehler', detail: 'Das Formular muss komplett ausgefüllt sein.'});
+    }
+  }
+
+  onSaveChannel() {
+    if(this.channel.id.length > 0 && this.channel.name.length > 0 && this.channel.deviceId.length > 0) {
+      this.channel.id = this.channel.deviceId + "/" + this.channel.id;
+      this.service.saveChannel(this.channel).subscribe(() => {
+        this.service.fetchChannels().subscribe(n => {
+          this.channels = n;
+        });
+        this.showChannelDlg = false;
+      });
+    } else {
+      this.messageService.add({severity:'error', summary: 'Fehler', detail: 'Das Formular muss komplett ausgefüllt sein.'});
+    }
+  }
+
+  onDeleteChannel(channel: Channel): void {
+    this.service.deleteChannel(channel.id).subscribe(x=>{
+      this.service.fetchChannels().subscribe(n => {
+        this.channels = n;
+      });
+    });
+  }
+
+  onDeleteDevice(device: Device): void {
+    this.service.deleteDevice(device.id).subscribe(x=>{
+      this.service.fetchDevices().subscribe(n => {
+        this.devices = n;
+      });
+    });
+  }
+
+  onDeleteNode(node: ThingNode) {
+    this.service.deleteNode(node.id).subscribe(x=>{
+      this.service.fetchNodes().subscribe(n => {
+        this.nodes = n;
+      });
+    });
   }
 }

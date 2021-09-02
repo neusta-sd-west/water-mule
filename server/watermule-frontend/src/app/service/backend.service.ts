@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {ThingNode} from "../entity/thing-node";
 import {Observable} from "rxjs";
 import {Channel} from "../entity/channel";
@@ -40,4 +40,21 @@ export class BackendService {
   saveChannel(dto: Channel): Observable<Channel> {
     return this.http.post<Channel>(`${this.backendUrl}${this.apiPath}/channels`, dto);
   }
+
+  deleteNode(id: string): Observable<any> {
+    const params = new HttpParams().set('id', id);
+    return this.http.delete(`${this.backendUrl}${this.apiPath}/nodes`, { params: params } );
+  }
+
+  deleteDevice(id: string): Observable<any> {
+    const params = new HttpParams().set('id', id);
+    return this.http.delete(`${this.backendUrl}${this.apiPath}/devices`, { params: params } );
+  }
+
+  deleteChannel(id: string): Observable<any> {
+    const params = new HttpParams().set('id', id);
+    return this.http.delete(`${this.backendUrl}${this.apiPath}/channels`, { params: params } );
+  }
+
+
 }

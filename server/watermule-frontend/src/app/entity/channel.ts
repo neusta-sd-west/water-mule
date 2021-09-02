@@ -1,6 +1,6 @@
 export class Channel {
   id="";
-  thing_id="";
+  deviceId="";
   name="";
   description="";
   unit="";

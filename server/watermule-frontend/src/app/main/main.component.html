@@ -1,5 +1,3 @@
-<h1>Watermule Client</h1>
-
 <div class="p-grid">
   <div class="p-col-10">
     <h2>Stammdaten</h2>
@@ -11,6 +9,7 @@
               <th>Schlüssel</th>
               <th>Name</th>
               <th>Beschreibung</th>
+              <th></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-node>
@@ -18,6 +17,9 @@
               <td>{{node.id}}</td>
               <td>{{node.name}}</td>
               <td>{{node.description}}</td>
+              <td style="text-align:center">
+                <button pButton pRipple type="button" icon="pi pi-trash" (click)="onDeleteNode(node)" class="p-button-rounded p-button-text"></button>
+              </td>
             </tr>
           </ng-template>
         </p-table>
@@ -32,14 +34,18 @@
               <th>Knoten</th>
               <th>Name</th>
               <th>Beschreibung</th>
+              <th></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-device>
             <tr>
               <td>{{device.id}}</td>
-              <td>{{device.node_id}}</td>
+              <td>{{device.nodeId}}</td>
               <td>{{device.name}}</td>
               <td>{{device.description}}</td>
+              <td style="text-align:center">
+                <button pButton pRipple type="button" icon="pi pi-trash" (click)="onDeleteDevice(device)" class="p-button-rounded p-button-text"></button>
+              </td>
             </tr>
           </ng-template>
         </p-table>
@@ -55,15 +61,19 @@
               <th>Name</th>
               <th>Beschreibung</th>
               <th>Einheit</th>
+              <th></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-channel>
             <tr>
               <td>{{channel.id}}</td>
-              <td>{{channel.thing_id}}</td>
+              <td>{{channel.deviceId}}</td>
               <td>{{channel.name}}</td>
               <td>{{channel.description}}</td>
               <td>{{channel.unit}}</td>
+              <td style="text-align:center">
+                <button pButton pRipple type="button" icon="pi pi-trash" (click)="onDeleteChannel(channel)" class="p-button-rounded p-button-text"></button>
+              </td>
             </tr>
           </ng-template>
         </p-table>
@@ -87,24 +97,104 @@
 
     <div class="p-field">
       <label for="inputId">Schlüssel</label>
-      <input [(ngModel)]="node.id" id="inputId" pInputText type="text" required autofocus/>
+      <input type="text" pInputText [(ngModel)]="node.id" id="inputId"/>
     </div>
 
-    <div class="p-field p-col-12 p-md-4">
-      <label for="inputName">Name:</label>
+    <div class="p-field">
+      <label for="inputName">Name</label>
       <input [(ngModel)]="node.name" id="inputName" pInputText type="text"/>
     </div>
 
-    <div class="p-field p-col-12 p-md-4">
-      <label for="inputDescription">Beschreibung:</label>
+    <div class="p-field">
+      <label for="inputDescription">Beschreibung</label>
       <input [(ngModel)]="node.description" id="inputDescription" pInputText type="text"/>
     </div>
 
   </ng-template>
 
   <ng-template pTemplate="footer">
-    <p-button icon="pi pi-check" (click)="onSaveNode()" label="Ok" styleClass="p-button-text"></p-button>
+    <button pButton pRipple  icon="pi pi-check" (click)="onSaveNode()" label="Ok" styleClass="p-button-text"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Neues Gerät" [(visible)]="showDeviceDlg" [modal]="true" [style]="{width: '50vw'}"
+          [draggable]="false" [resizable]="false" styleClass="p-fluid">
+
+  <ng-template pTemplate="content">
+
+    <div class="p-field">
+      <label for="nodeIdDevice">Knoten</label>
+      <p-dropdown [(ngModel)]="device.nodeId"
+                  [options]="nodes"
+                  optionLabel="id" optionValue="id"
+                  id="nodeIdDevice"
+                  scrollHeight="240px">
+        placeholder="Auftrag wählen...">
+      </p-dropdown>
+    </div>
+
+    <div class="p-field">
+      <label for="inputIdDevice">Schlüssel</label>
+      <input type="text" pInputText [(ngModel)]="device.id" id="inputIdDevice"/>
+    </div>
+
+    <div class="p-field">
+      <label for="inputNameDevice">Name</label>
+      <input [(ngModel)]="device.name" id="inputNameDevice" pInputText type="text"/>
+    </div>
+
+    <div class="p-field">
+      <label for="inputDescriptionDevice">Beschreibung</label>
+      <input [(ngModel)]="device.description" id="inputDescriptionDevice" pInputText type="text"/>
+    </div>
+
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple  icon="pi pi-check" (click)="onSaveDevice()" label="Ok" styleClass="p-button-text"></button>
   </ng-template>
 </p-dialog>
 
 
+<p-dialog header="Neuer Kanal" [(visible)]="showChannelDlg" [modal]="true" [style]="{width: '50vw'}"
+          [draggable]="false" [resizable]="false" styleClass="p-fluid">
+
+  <ng-template pTemplate="content">
+
+    <div class="p-field">
+      <label for="nodeIdDevice">Gerät</label>
+      <p-dropdown [(ngModel)]="channel.deviceId"
+                  [options]="devices"
+                  optionLabel="id" optionValue="id"
+                  id="nodeIdChannel"
+                  scrollHeight="240px">
+        placeholder="Auftrag wählen...">
+      </p-dropdown>
+    </div>
+
+    <div class="p-field">
+      <label for="inputIdChannel">Schlüssel</label>
+      <input type="text" pInputText [(ngModel)]="channel.id" id="inputIdChannel"/>
+    </div>
+
+    <div class="p-field">
+      <label for="inputNameDevice">Name</label>
+      <input [(ngModel)]="channel.name" id="inputNameChannel" pInputText type="text"/>
+    </div>
+
+    <div class="p-field">
+      <label for="inputDescriptionChannel">Beschreibung</label>
+      <input [(ngModel)]="channel.description" id="inputDescriptionChannel" pInputText type="text"/>
+    </div>
+
+    <div class="p-field">
+      <label for="inputUnitDevice">Einheit</label>
+      <input [(ngModel)]="channel.unit" id="inputUnitDevice" pInputText type="text"/>
+    </div>
+
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple  icon="pi pi-check" (click)="onSaveChannel()" label="Ok" styleClass="p-button-text"></button>
+  </ng-template>
+</p-dialog>

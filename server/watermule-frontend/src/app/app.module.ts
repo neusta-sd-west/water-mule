@@ -16,6 +16,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {FormsModule} from "@angular/forms";
 import {ToastModule} from "primeng/toast";
 import {MessageService} from "primeng/api";
+import {DropdownModule} from "primeng/dropdown";
+import {InputTextModule} from "primeng/inputtext";
 
 @NgModule({
   declarations: [
@@ -24,19 +26,21 @@ import {MessageService} from "primeng/api";
     FooterComponent,
     MainComponent
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        AppRoutingModule,
-        MenubarModule,
-        TableModule,
-        TabViewModule,
-        HttpClientModule,
-        ButtonModule,
-        DialogModule,
-        FormsModule,
-        ToastModule
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    MenubarModule,
+    TableModule,
+    TabViewModule,
+    HttpClientModule,
+    ButtonModule,
+    DialogModule,
+    FormsModule,
+    ToastModule,
+    DropdownModule,
+    InputTextModule
+  ],
   providers: [
     MessageService
   ],
