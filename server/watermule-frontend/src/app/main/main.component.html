@@ -2,29 +2,33 @@
   <div class="p-col-10">
     <h2>Stammdaten</h2>
     <p-tabView>
-      <p-tabPanel header="Knoten">
-        <p-table [value]="nodes" responsiveLayout="scroll">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Schlüssel</th>
-              <th>Name</th>
-              <th>Beschreibung</th>
-              <th></th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-node>
-            <tr>
-              <td>{{node.id}}</td>
-              <td>{{node.name}}</td>
-              <td>{{node.description}}</td>
-              <td style="text-align:center">
-                <button pButton pRipple type="button" icon="pi pi-trash" (click)="onDeleteNode(node)" class="p-button-rounded p-button-text"></button>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-        <p-button label="Neu" (onClick)="onNodeNew()"></p-button>
-      </p-tabPanel>
+    <p-tabPanel header="Kanäle">
+      <p-table [value]="channels" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Schlüssel</th>
+            <th>Gerät</th>
+            <th>Name</th>
+            <th>Beschreibung</th>
+            <th>Einheit</th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-channel>
+          <tr>
+            <td>{{channel.id}}</td>
+            <td>{{channel.deviceId}}</td>
+            <td>{{channel.name}}</td>
+            <td>{{channel.description}}</td>
+            <td>{{channel.unit}}</td>
+            <td style="text-align:center">
+              <button pButton pRipple type="button" icon="pi pi-trash" (click)="onDeleteChannel(channel)" class="p-button-rounded p-button-text"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-button label="Neu" (onClick)="onChannelNew()"></p-button>
+    </p-tabPanel>
 
       <p-tabPanel header="Geräte">
         <p-table [value]="devices" responsiveLayout="scroll">
@@ -52,33 +56,30 @@
         <p-button label="Neu" (onClick)="onDeviceNew()"></p-button>
       </p-tabPanel>
 
-      <p-tabPanel header="Kanäle">
-        <p-table [value]="channels" responsiveLayout="scroll">
+      <p-tabPanel header="Knoten">
+        <p-table [value]="nodes" responsiveLayout="scroll">
           <ng-template pTemplate="header">
             <tr>
               <th>Schlüssel</th>
-              <th>Gerät</th>
               <th>Name</th>
               <th>Beschreibung</th>
-              <th>Einheit</th>
               <th></th>
             </tr>
           </ng-template>
-          <ng-template pTemplate="body" let-channel>
+          <ng-template pTemplate="body" let-node>
             <tr>
-              <td>{{channel.id}}</td>
-              <td>{{channel.deviceId}}</td>
-              <td>{{channel.name}}</td>
-              <td>{{channel.description}}</td>
-              <td>{{channel.unit}}</td>
+              <td>{{node.id}}</td>
+              <td>{{node.name}}</td>
+              <td>{{node.description}}</td>
               <td style="text-align:center">
-                <button pButton pRipple type="button" icon="pi pi-trash" (click)="onDeleteChannel(channel)" class="p-button-rounded p-button-text"></button>
+                <button pButton pRipple type="button" icon="pi pi-trash" (click)="onDeleteNode(node)" class="p-button-rounded p-button-text"></button>
               </td>
             </tr>
           </ng-template>
         </p-table>
-        <p-button label="Neu" (onClick)="onChannelNew()"></p-button>
+        <p-button label="Neu" (onClick)="onNodeNew()"></p-button>
       </p-tabPanel>
+
     </p-tabView>
   </div>
   <div class="p-col-2">
