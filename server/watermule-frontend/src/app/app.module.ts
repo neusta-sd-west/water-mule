@@ -10,6 +10,12 @@ import {MenubarModule} from "primeng/menubar";
 import {TableModule} from "primeng/table";
 import {TabViewModule} from "primeng/tabview";
 import {HttpClientModule} from "@angular/common/http";
+import {ButtonModule} from "primeng/button";
+import {DialogModule} from "primeng/dialog";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {FormsModule} from "@angular/forms";
+import {ToastModule} from "primeng/toast";
+import {MessageService} from "primeng/api";
 
 @NgModule({
   declarations: [
@@ -20,13 +26,20 @@ import {HttpClientModule} from "@angular/common/http";
   ],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         AppRoutingModule,
         MenubarModule,
         TableModule,
         TabViewModule,
-        HttpClientModule
+        HttpClientModule,
+        ButtonModule,
+        DialogModule,
+        FormsModule,
+        ToastModule
     ],
-  providers: [],
+  providers: [
+    MessageService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

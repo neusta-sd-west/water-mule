@@ -1,7 +1,7 @@
-export interface Channel {
-  id?:string;
-  thing_id?: string;
-  name?: string;
-  description?:string;
-  unit?:string;
+export class Channel {
+  id="";
+  thing_id="";
+  name="";
+  description="";
+  unit="";
 }

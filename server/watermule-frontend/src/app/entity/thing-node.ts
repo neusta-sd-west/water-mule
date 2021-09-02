@@ -1,5 +1,5 @@
-export interface ThingNode {
-  id?:string;
-  name?:string;
-  description?:string;
+export class ThingNode {
+  id="";
+  name="";
+  description="";
 }

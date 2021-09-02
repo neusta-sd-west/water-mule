@@ -13,7 +13,7 @@ export class BackendService {
   protected readonly apiPath: string;
 
   constructor(protected http: HttpClient) {
-    this.backendUrl = ''; // environment.apiEndpoint;
+    this.backendUrl = '';
     this.apiPath = '/api/v1';
   }
 
@@ -21,11 +21,23 @@ export class BackendService {
     return this.http.get<ThingNode[]>(`${this.backendUrl}${this.apiPath}/nodes`);
   }
 
+  saveNode(dto: ThingNode): Observable<ThingNode> {
+    return this.http.post<ThingNode>(`${this.backendUrl}${this.apiPath}/nodes`, dto);
+  }
+
   fetchDevices(): Observable<Device[]> {
     return this.http.get<Device[]>(`${this.backendUrl}${this.apiPath}/devices`);
   }
 
+  saveDevice(dto: Device): Observable<Device> {
+    return this.http.post<Device>(`${this.backendUrl}${this.apiPath}/devices`, dto);
+  }
+
   fetchChannels(): Observable<Channel[]> {
     return this.http.get<Channel[]>(`${this.backendUrl}${this.apiPath}/channels`);
+  }
+
+  saveChannel(dto: Channel): Observable<Channel> {
+    return this.http.post<Channel>(`${this.backendUrl}${this.apiPath}/channels`, dto);
   }
 }

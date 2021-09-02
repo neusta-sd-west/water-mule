@@ -1,6 +1,6 @@
-export interface Device {
-  id?:string;
-  node_id?:string;
-  name?:string;
-  description?:string;
+export class Device {
+  id="";
+  node_id="";
+  name="";
+  description="";
 }
