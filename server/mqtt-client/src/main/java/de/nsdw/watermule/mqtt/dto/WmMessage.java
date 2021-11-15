@@ -6,7 +6,6 @@ package de.nsdw.watermule.mqtt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.springframework.web.method.annotation.InitBinderDataBinderFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
