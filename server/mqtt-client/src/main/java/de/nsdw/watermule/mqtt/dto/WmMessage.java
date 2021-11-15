@@ -6,6 +6,7 @@ package de.nsdw.watermule.mqtt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.springframework.web.method.annotation.InitBinderDataBinderFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,4 +22,10 @@ public class WmMessage {
         this.timestamp = LocalDateTime.now();
         this.value = null;
     }
+
+    public WmMessage(BigDecimal v) {
+        this.timestamp = LocalDateTime.now();
+        this.value = v;
+    }
+
 }

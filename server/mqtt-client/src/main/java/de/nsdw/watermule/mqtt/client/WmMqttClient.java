@@ -22,6 +22,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static java.lang.String.format;
@@ -114,17 +115,32 @@ public class WmMqttClient {
             if (message.isDuplicate()) {
                 return;
             }
-            // Just a really simple implementation of message parsing.
-            // {"value": 1234.78} or {"timestamp": "2017-11-11T03:45:17.345Z", "value": 123.456}
-            try {
-                WmMessage wmMessage = WmMqttClient.this.objectMapper().readValue(message.toString(), WmMessage.class);
+            String msgString = message.toString();
+            if(msgString.contains("{")) {
+                // Just a really simple implementation of message parsing.
+                // {"value": 1234.78} or {"timestamp": "2017-11-11T03:45:17.345Z", "value": 123.456}
                 try {
-                    WmMqttClient.this.repository.saveMessage(topic, wmMessage);
-                } catch (DuplicateKeyException e) {
-                    log.error(String.format("Value under this timestamp exists already: %s", message), e);
+                    WmMessage wmMessage = WmMqttClient.this.objectMapper().readValue(msgString, WmMessage.class);
+                    try {
+                        WmMqttClient.this.repository.saveMessage(topic, wmMessage);
+                    } catch (DuplicateKeyException e) {
+                        log.error(String.format("Value under this timestamp exists already: %s", message), e);
+                    }
+                } catch (JsonProcessingException e) {
+                    log.error(String.format("Could not parse MqttMessage: %s", message), e);
                 }
-            } catch (JsonProcessingException e) {
-                log.error(String.format("Could not parse MqttMessage: %s", message), e);
+            } else {
+                // Parse simple numeric message like 123.45
+                try {
+                    WmMessage wmMessage = new WmMessage(new BigDecimal(msgString));
+                    try {
+                        WmMqttClient.this.repository.saveMessage(topic, wmMessage);
+                    } catch (DuplicateKeyException e) {
+                        log.error(String.format("Value under this timestamp exists already: %s", message), e);
+                    }
+                } catch (NumberFormatException  e) {
+                    log.error(String.format("Could not parse MqttMessage: %s", message), e);
+                }
             }
         }
 
